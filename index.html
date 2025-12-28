@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Play Forge V32 - Full Restore</title>
+    <title>Play Forge V41 - Full Engine</title>
     <style>
         :root { --dark-0: #050505; --dark-1: #0f0f0f; --dark-2: #181818; --accent: #00ffff; --text: #ddd; --border: #333; }
         * { box-sizing: border-box; font-family: 'Inter', sans-serif; outline: none; -webkit-tap-highlight-color: transparent; }
@@ -13,28 +13,30 @@
         .toolbar { height: 50px; background: var(--dark-1); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 10px; gap: 8px; z-index: 100; }
         .main-container { display: flex; flex: 1; overflow: hidden; }
         
-        .sidebar { width: 280px; background: var(--dark-1); display: flex; flex-direction: column; border: 1px solid var(--border); }
-        .panel-header { background: var(--dark-2); padding: 12px; font-size: 11px; font-weight: 800; text-transform: uppercase; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        .sidebar { width: 300px; background: var(--dark-1); border: 1px solid var(--border); display: flex; flex-direction: column; }
+        .panel-header { background: var(--dark-2); padding: 12px; font-size: 10px; font-weight: 900; text-transform: uppercase; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
         .scroll-area { flex: 1; overflow-y: auto; padding: 15px; }
         
         #viewport { flex: 1; position: relative; background: #000; outline: none; }
         
-        .list-item { padding: 10px; border-bottom: 1px solid #222; font-size: 12px; cursor: pointer; }
-        .list-item.sel { background: #102a2a; border-left: 3px solid var(--accent); }
-        .btn { background: #252525; border: 1px solid var(--border); color: #fff; padding: 7px 12px; border-radius: 4px; font-size: 11px; cursor: pointer; font-weight: bold; }
+        .list-item { padding: 12px; border-bottom: 1px solid #222; font-size: 12px; cursor: pointer; transition: 0.2s; }
+        .list-item:hover { background: #1a1a1a; }
+        .list-item.sel { background: #102a2a; border-left: 4px solid var(--accent); }
+        .btn { background: #252525; border: 1px solid var(--border); color: #fff; padding: 8px 12px; border-radius: 4px; font-size: 11px; cursor: pointer; font-weight: bold; }
+        .btn:active { transform: scale(0.95); }
 
-        #create-menu { position: absolute; left: 10px; top: 10px; background: var(--dark-2); border: 1px solid var(--border); border-radius: 8px; display: none; flex-direction: column; z-index: 1000; box-shadow: 0 0 20px rgba(0,255,255,0.2); }
-        .menu-opt { padding: 14px 25px; font-size: 13px; cursor: pointer; border-bottom: 1px solid #333; }
-        .menu-opt:hover { background: #222; color: var(--accent); }
+        #create-menu { position: absolute; left: 10px; top: 10px; background: var(--dark-2); border: 1px solid var(--border); border-radius: 4px; display: none; flex-direction: column; z-index: 1000; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .menu-opt { padding: 14px 20px; font-size: 12px; cursor: pointer; border-bottom: 1px solid #333; }
+        .menu-opt:hover { background: var(--accent); color: #000; }
         
-        #joy-zone { position: absolute; bottom: 40px; left: 40px; width: 110px; height: 110px; background: rgba(0,255,255,0.05); border: 1px solid rgba(0,255,255,0.2); border-radius: 50%; display: none; z-index: 500;}
-        #joy-knob { position: absolute; top: 35px; left: 35px; width: 40px; height: 40px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 15px var(--accent); }
-        #btn-jump { position: absolute; bottom: 40px; right: 40px; width: 80px; height: 80px; background: rgba(0,255,255,0.1); border: 2px solid var(--accent); border-radius: 50%; display: none; justify-content: center; align-items: center; font-weight: bold; color: var(--accent); z-index: 500;}
+        #joy-zone { position: absolute; bottom: 50px; left: 50px; width: 120px; height: 120px; background: rgba(0,255,255,0.03); border: 2px solid rgba(0,255,255,0.1); border-radius: 50%; display: none; z-index: 2000; }
+        #joy-knob { position: absolute; top: 35px; left: 35px; width: 50px; height: 50px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 20px var(--accent); pointer-events: none; }
+        #btn-jump { position: absolute; bottom: 60px; right: 40px; width: 75px; height: 75px; background: rgba(0,255,255,0.1); border: 2px solid var(--accent); border-radius: 50%; display: none; justify-content: center; align-items: center; font-weight: bold; color: var(--accent); z-index: 2000; }
 
-        label { display: block; margin-top: 15px; font-size: 10px; color: #888; text-transform: uppercase; font-weight: 800; }
-        input, select, textarea { background: #000; border: 1px solid var(--border); color: #fff; width: 100%; padding: 10px; margin-top: 5px; border-radius: 4px; }
-        .script-card { background: #111; border: 1px solid #333; padding: 10px; border-radius: 6px; margin-bottom: 10px; }
-        .script-card textarea { height: 80px; font-family: monospace; font-size: 11px; }
+        label { display: block; margin-top: 15px; font-size: 9px; color: #888; text-transform: uppercase; font-weight: 800; }
+        input, select, textarea { background: #000; border: 1px solid var(--border); color: #fff; width: 100%; padding: 10px; margin-top: 5px; border-radius: 4px; font-size: 12px; }
+        .script-card { background: #111; border: 1px solid #444; padding: 10px; border-radius: 6px; margin-bottom: 15px; }
+        .script-card textarea { height: 120px; font-family: 'Courier New', monospace; font-size: 11px; color: #00ffaa; border-color: #222; }
     </style>
 
     <script type="importmap">
@@ -48,283 +50,348 @@
 </head>
 <body>
 
-    <div id="editor-ui">
-        <div class="toolbar">
-            <button class="btn" id="t-move">MOVER</button>
-            <button class="btn" id="t-rotate">GIRAR</button>
-            <button class="btn" id="t-scale">ESCALA</button>
-            <div style="flex:1"></div>
-            <button class="btn" id="btn-fs">FULLSCREEN</button>
-            <button class="btn" id="btn-play" style="background:#006666; color:#00ffff; border-color:#00ffff">PLAY</button>
+<div id="editor-ui">
+    <div class="toolbar">
+        <button class="btn" onclick="setGizmo('translate')">MOVER</button>
+        <button class="btn" onclick="setGizmo('rotate')">GIRAR</button>
+        <button class="btn" onclick="setGizmo('scale')">ESCALA</button>
+        <div style="flex:1"></div>
+        <button class="btn" id="btn-fs">TELA CHEIA</button>
+        <button class="btn" id="btn-play" style="background:#004444; color:var(--accent); border-color:var(--accent)">PLAY</button>
+    </div>
+
+    <div class="main-container">
+        <div class="sidebar">
+            <div class="panel-header">Hierarchy <span onclick="toggleMenu()" style="color:var(--accent); cursor:pointer; font-size:16px">+</span></div>
+            <div id="obj-list" class="scroll-area"></div>
         </div>
 
-        <div class="main-container">
-            <div class="sidebar">
-                <div class="panel-header">Hierarchy <span id="open-add" style="color:var(--accent); cursor:pointer;">➕</span></div>
-                <div id="obj-list" class="scroll-area"></div>
+        <div id="viewport">
+            <div id="create-menu">
+                <div class="menu-opt" onclick="spawn('box')">📦 Bloco</div>
+                <div class="menu-opt" onclick="spawn('sphere')">⚽ Esfera</div>
+                <div class="menu-opt" onclick="spawn('player')">👤 Player</div>
+                <div class="menu-opt" onclick="triggerImport()" style="color:var(--accent)">📥 Importar GLB</div>
             </div>
+            
+            <input type="file" id="file-glb" hidden accept=".glb,.gltf">
+            <input type="file" id="file-tex" hidden accept="image/*">
+            
+            <div id="joy-zone"><div id="joy-knob"></div></div>
+            <div id="btn-jump">PULAR</div>
+        </div>
 
-            <div id="viewport">
-                <div id="create-menu">
-                    <div class="menu-opt" data-type="box">📦 Bloco</div>
-                    <div class="menu-opt" data-type="sphere">⚽ Esfera</div>
-                    <div class="menu-opt" data-type="player">👤 Player</div>
-                    <div class="menu-opt" id="import-trigger" style="color:var(--accent); font-weight:bold;">📥 Importar GLB</div>
-                </div>
-                <input type="file" id="file-glb" hidden accept=".glb,.gltf">
-                <input type="file" id="file-tex" hidden accept="image/*">
-                <div id="joy-zone"><div id="joy-knob"></div></div>
-                <div id="btn-jump">JUMP</div>
-            </div>
+        <div class="sidebar">
+            <div class="panel-header">Inspector</div>
+            <div id="inspector-panel" class="scroll-area" style="display:none">
+                <label>Nome do Objeto</label>
+                <input type="text" id="i-name">
+                
+                <label>Cor do Material</label>
+                <input type="color" id="i-color">
+                
+                <label>Textura</label>
+                <button class="btn" onclick="triggerTex()" style="width:100%; margin-top:5px; background:#111">SELECIONAR IMAGEM</button>
+                
+                <label>Física</label>
+                <select id="i-phys">
+                    <option value="none">Passável</option>
+                    <option value="fixed">Sólido (Colisão)</option>
+                </select>
 
-            <div class="sidebar">
-                <div class="panel-header">Inspector</div>
-                <div id="ins-scroll" class="scroll-area" style="display:none">
-                    <label>Nome</label><input type="text" id="i-name">
-                    
-                    <label>Física</label>
-                    <select id="i-phys">
-                        <option value="none">Nenhuma</option>
-                        <option value="fixed">Sólido (Colisão)</option>
+                <div id="player-only" style="display:none">
+                    <label>Visão</label>
+                    <select id="i-cam">
+                        <option value="1st">Primeira Pessoa</option>
+                        <option value="3rd">Terceira Pessoa</option>
                     </select>
-
-                    <div id="i-player-only" style="display:none">
-                        <label>Câmera</label>
-                        <select id="i-cam">
-                            <option value="1st">1ª Pessoa</option>
-                            <option value="3rd">3ª Pessoa</option>
-                        </select>
-                    </div>
-
-                    <label>Cor</label>
-                    <input type="color" id="i-color">
-                    <button class="btn" id="tex-btn" style="width:100%; margin-top:10px">Mudar Textura</button>
-                    
-                    <hr style="border:0; border-top:1px solid #333; margin:20px 0;">
-                    
-                    <label>Scripts</label>
-                    <button class="btn" id="add-script" style="width:100%; background:#1a3333; color:var(--accent)">+ NOVO SCRIPT</button>
-                    <div id="scripts-container" style="margin-top:10px"></div>
-
-                    <button class="btn" id="btn-del" style="width:100%; margin-top:20px; color:#ff4444; border-color:#ff4444">DELETAR</button>
                 </div>
+
+                <hr style="border:0; border-top:1px solid #333; margin:20px 0;">
+                
+                <label>Scripts Ativos</label>
+                <button class="btn" onclick="addScript()" style="width:100%; background:#002222; color:var(--accent)">+ ADICIONAR SCRIPT</button>
+                <div id="scripts-container" style="margin-top:10px"></div>
+
+                <button class="btn" id="btn-del" style="width:100%; margin-top:30px; color:#ff4444; border-color:#ff4444; background: rgba(255,0,0,0.05)">DELETAR OBJETO</button>
             </div>
         </div>
     </div>
+</div>
 
-    <script type="module">
-        import * as THREE from 'three';
-        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-        import { TransformControls } from 'three/addons/controls/TransformControls.js';
-        import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+<script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    import { TransformControls } from 'three/addons/controls/TransformControls.js';
+    import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
-        let scene, camera, renderer, controls, gizmo, loader;
-        let objects = [], selected = null, isPlaying = false;
-        let moveF = 0, moveS = 0, vy = 0, yaw = 0, pitch = 0;
-        let touchLookId = null, lastTouchX = 0, lastTouchY = 0;
-        const raycaster = new THREE.Raycaster();
+    let scene, camera, renderer, controls, gizmo, loader;
+    let objects = [], selected = null, isPlaying = false;
+    let moveF = 0, moveS = 0, vy = 0, yaw = 0, pitch = 0;
+    let lookTouchId = null, lastX, lastY;
 
-        function init() {
-            const container = document.getElementById('viewport');
-            scene = new THREE.Scene(); 
-            scene.background = new THREE.Color(0x050505);
+    init();
+
+    function init() {
+        const container = document.getElementById('viewport');
+        scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x050505);
+
+        camera = new THREE.PerspectiveCamera(60, container.clientWidth/container.clientHeight, 0.1, 1000);
+        camera.position.set(10, 10, 10);
+
+        renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        container.appendChild(renderer.domElement);
+
+        scene.add(new THREE.AmbientLight(0xffffff, 0.7));
+        const sun = new THREE.DirectionalLight(0xffffff, 1.0);
+        sun.position.set(5, 20, 10);
+        scene.add(sun);
+
+        scene.add(new THREE.GridHelper(100, 100, 0x00ffff, 0x002222));
+
+        controls = new OrbitControls(camera, renderer.domElement);
+        gizmo = new TransformControls(camera, renderer.domElement);
+        gizmo.addEventListener('dragging-changed', e => controls.enabled = !e.value);
+        scene.add(gizmo);
+
+        loader = new GLTFLoader();
+
+        // Globals
+        window.spawn = spawn;
+        window.toggleMenu = () => { const m = document.getElementById('create-menu'); m.style.display = m.style.display === 'flex' ? 'none' : 'flex'; };
+        window.setGizmo = (mode) => gizmo.setMode(mode);
+        window.triggerImport = () => document.getElementById('file-glb').click();
+        window.triggerTex = () => document.getElementById('file-tex').click();
+        window.addScript = addScript;
+
+        setupEvents();
+        loop();
+    }
+
+    function spawn(type, data = null) {
+        let mesh;
+        const defaultMat = new THREE.MeshStandardMaterial({ color: 0x0088ff });
+
+        if(type === 'box') mesh = new THREE.Mesh(new THREE.BoxGeometry(1,1,1), defaultMat);
+        else if(type === 'sphere') mesh = new THREE.Mesh(new THREE.SphereGeometry(0.5, 32, 32), defaultMat);
+        else if(type === 'player') mesh = new THREE.Mesh(new THREE.CapsuleGeometry(0.3, 1), new THREE.MeshStandardMaterial({color: 0x00ff00}));
+        else if(type === 'glb') mesh = data;
+
+        mesh.position.set(0, 1, 0);
+        const obj = { 
+            id: Date.now(), 
+            name: type + "_" + objects.length, 
+            type, 
+            mesh, 
+            phys: 'none', 
+            cam: '1st', 
+            scripts: [] 
+        };
+
+        scene.add(mesh);
+        objects.push(obj);
+        refreshHierarchy();
+        select(obj);
+        document.getElementById('create-menu').style.display = 'none';
+    }
+
+    function select(obj) {
+        selected = obj;
+        if(obj && !isPlaying) gizmo.attach(obj.mesh); else gizmo.detach();
+        
+        const panel = document.getElementById('inspector-panel');
+        panel.style.display = obj ? 'block' : 'none';
+        
+        if(obj) {
+            document.getElementById('i-name').value = obj.name;
+            document.getElementById('i-phys').value = obj.phys;
+            document.getElementById('player-only').style.display = obj.type === 'player' ? 'block' : 'none';
             
-            camera = new THREE.PerspectiveCamera(60, container.clientWidth/container.clientHeight, 0.1, 1000);
-            camera.position.set(8, 8, 8);
-            
-            renderer = new THREE.WebGLRenderer({ antialias: true });
-            renderer.setSize(container.clientWidth, container.clientHeight);
-            renderer.setPixelRatio(window.devicePixelRatio);
-            container.appendChild(renderer.domElement);
-
-            scene.add(new THREE.AmbientLight(0xffffff, 0.7));
-            const sun = new THREE.DirectionalLight(0xffffff, 0.8); sun.position.set(5,15,5); scene.add(sun);
-            
-            // Grid Azul Restaurada
-            const grid = new THREE.GridHelper(100, 100, 0x00ffff, 0x002222);
-            scene.add(grid);
-
-            controls = new OrbitControls(camera, renderer.domElement);
-            gizmo = new TransformControls(camera, renderer.domElement);
-            gizmo.addEventListener('dragging-changed', e => controls.enabled = !e.value);
-            scene.add(gizmo);
-
-            loader = new GLTFLoader();
-            setupEvents();
-            loop();
-        }
-
-        function spawn(type, data = null) {
-            let mesh;
-            const mat = new THREE.MeshStandardMaterial({color: 0x4c7eff});
-            
-            if(type === 'box') mesh = new THREE.Mesh(new THREE.BoxGeometry(1,1,1), mat);
-            else if(type === 'sphere') mesh = new THREE.Mesh(new THREE.SphereGeometry(0.5, 32, 32), mat);
-            else if(type === 'player') mesh = new THREE.Mesh(new THREE.CapsuleGeometry(0.3, 1), new THREE.MeshStandardMaterial({color: 0x00ff00}));
-            else if(type === 'glb') mesh = data;
-
-            mesh.position.set(0, 1, 0);
-            const obj = { name: (data?.name || type) + "_" + objects.length, type, mesh, phys: 'none', cam: '1st', scripts: [] };
-            scene.add(mesh); objects.push(obj); select(obj); refreshH();
-            document.getElementById('create-menu').style.display = 'none';
-        }
-
-        function select(obj) {
-            selected = obj;
-            if(obj && !isPlaying) gizmo.attach(obj.mesh); else gizmo.detach();
-            document.getElementById('ins-scroll').style.display = obj ? 'block' : 'none';
-            if(obj) {
-                document.getElementById('i-name').value = obj.name;
-                document.getElementById('i-phys').value = obj.phys;
-                document.getElementById('i-cam').value = obj.cam;
-                document.getElementById('i-player-only').style.display = obj.type === 'player' ? 'block' : 'none';
-                if(obj.mesh.material && obj.mesh.material.color) document.getElementById('i-color').value = "#" + obj.mesh.material.color.getHexString();
-                renderScripts();
+            // Sincronizar Cor no Input
+            if(obj.mesh.material && obj.mesh.material.color) {
+                document.getElementById('i-color').value = "#" + obj.mesh.material.color.getHexString();
             }
+            renderScripts();
         }
+    }
 
-        function renderScripts() {
-            const container = document.getElementById('scripts-container'); container.innerHTML = '';
-            if(!selected) return;
-            selected.scripts.forEach((s, i) => {
-                const card = document.createElement('div'); card.className = 'script-card';
-                card.innerHTML = `<input type="text" value="${s.name}" oninput="selected.scripts[${i}].name=this.value"><textarea oninput="selected.scripts[${i}].code=this.value">${s.code}</textarea><button class="btn" style="width:100%;color:red;margin-top:5px" onclick="selected.scripts.splice(${i},1); renderScripts();">Remover</button>`;
-                container.appendChild(card);
-            });
-        }
+    function addScript() {
+        if(!selected) return;
+        selected.scripts.push({ name: 'Script_' + selected.scripts.length, code: 'this.rotation.y += 0.02;' });
+        renderScripts();
+    }
 
-        function setupEvents() {
-            document.getElementById('btn-fs').onclick = () => { if(!document.fullscreenElement) document.documentElement.requestFullscreen(); else document.exitFullscreen(); };
-            document.getElementById('i-color').oninput = e => { if(selected && selected.mesh.material) selected.mesh.material.color.set(e.target.value); };
-            document.getElementById('i-phys').onchange = e => { if(selected) selected.phys = e.target.value; };
-            document.getElementById('i-cam').onchange = e => { if(selected) selected.cam = e.target.value; };
-            document.getElementById('i-name').oninput = e => { if(selected) { selected.name = e.target.value; refreshH(); } };
-            document.getElementById('add-script').onclick = () => { if(selected) { selected.scripts.push({name:'Novo Script', code:'this.rotation.y += 0.02;'}); renderScripts(); } };
+    function renderScripts() {
+        const container = document.getElementById('scripts-container');
+        container.innerHTML = '';
+        if(!selected) return;
+
+        selected.scripts.forEach((s, i) => {
+            const card = document.createElement('div');
+            card.className = 'script-card';
             
-            // IMPORTAR GLB RESTAURADO
-            document.getElementById('import-trigger').onclick = () => document.getElementById('file-glb').click();
-            document.getElementById('file-glb').onchange = e => {
-                const f = e.target.files[0];
-                if(f) {
-                    const url = URL.createObjectURL(f);
-                    loader.load(url, (gltf) => {
-                        spawn('glb', gltf.scene);
-                    });
-                }
+            const inp = document.createElement('input');
+            inp.value = s.name;
+            inp.oninput = (e) => s.name = e.target.value;
+
+            const txt = document.createElement('textarea');
+            txt.value = s.code;
+            txt.oninput = (e) => s.code = e.target.value;
+
+            const del = document.createElement('button');
+            del.className = 'btn';
+            del.style.cssText = "width:100%; color:red; margin-top:8px; background:rgba(255,0,0,0.1)";
+            del.innerText = "REMOVER SCRIPT";
+            del.onclick = () => {
+                selected.scripts.splice(i, 1);
+                renderScripts();
             };
 
-            document.getElementById('tex-btn').onclick = () => document.getElementById('file-tex').click();
-            document.getElementById('file-tex').onchange = e => {
-                const f = e.target.files[0];
-                if(f && selected) new THREE.TextureLoader().load(URL.createObjectURL(f), t => { selected.mesh.material.map = t; selected.mesh.material.needsUpdate = true; });
-            };
+            card.append(inp, txt, del);
+            container.appendChild(card);
+        });
+    }
 
-            document.getElementById('btn-play').onclick = () => {
-                isPlaying = !isPlaying;
-                document.getElementById('btn-play').innerText = isPlaying ? "STOP" : "PLAY";
-                document.getElementById('joy-zone').style.display = isPlaying ? "block" : "none";
-                document.getElementById('btn-jump').style.display = isPlaying ? "flex" : "none";
-                controls.enabled = !isPlaying;
-                gizmo.detach();
+    function setupEvents() {
+        // Fullscreen
+        document.getElementById('btn-fs').onclick = () => {
+            if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+            else document.exitFullscreen();
+        };
 
-                if(isPlaying) {
-                    objects.forEach(o => {
-                        o.oldP = o.mesh.position.clone(); o.oldR = o.mesh.rotation.clone(); o.oldS = o.mesh.scale.clone();
-                        o.fns = o.scripts.map(s => new Function(s.code).bind(o.mesh));
-                    });
-                } else {
-                    objects.forEach(o => {
-                        if(o.oldP) { o.mesh.position.copy(o.oldP); o.mesh.rotation.copy(o.oldR); o.mesh.scale.copy(o.oldS); }
-                        o.fns = [];
-                    });
-                    if(selected) gizmo.attach(selected.mesh);
-                    vy = 0; yaw = 0; pitch = 0;
-                }
-            };
+        // Play/Stop
+        document.getElementById('btn-play').onclick = () => {
+            isPlaying = !isPlaying;
+            document.getElementById('btn-play').innerText = isPlaying ? "STOP" : "PLAY";
+            document.getElementById('joy-zone').style.display = isPlaying ? "block" : "none";
+            document.getElementById('btn-jump').style.display = isPlaying ? "flex" : "none";
+            controls.enabled = !isPlaying;
+            gizmo.detach();
 
-            document.getElementById('t-move').onclick = () => gizmo.setMode('translate');
-            document.getElementById('t-rotate').onclick = () => gizmo.setMode('rotate');
-            document.getElementById('t-scale').onclick = () => gizmo.setMode('scale');
-            document.getElementById('open-add').onclick = () => { const m = document.getElementById('create-menu'); m.style.display = m.style.display==='flex'?'none':'flex'; };
-            document.querySelectorAll('.menu-opt[data-type]').forEach(el => el.onclick = () => spawn(el.dataset.type));
-            document.getElementById('btn-del').onclick = () => { if(selected) { scene.remove(selected.mesh); objects = objects.filter(x => x !== selected); select(null); refreshH(); } };
-
-            // Joystick
-            const jz = document.getElementById('joy-zone'), jk = document.getElementById('joy-knob');
-            jz.addEventListener('touchstart', e => {
-                let r = jz.getBoundingClientRect();
-                let cx = r.left + r.width/2, cy = r.top + r.height/2;
-                const m = ev => {
-                    let t = ev.touches[0], dx = t.clientX - cx, dy = t.clientY - cy;
-                    let d = Math.min(Math.sqrt(dx*dx+dy*dy), 40), a = Math.atan2(dy, dx);
-                    jk.style.transform = `translate(${Math.cos(a)*d}px, ${Math.sin(a)*d}px)`;
-                    moveS = -(Math.cos(a)*d)/40; moveF = -(Math.sin(a)*d)/40;
-                };
-                const end = () => { moveF = moveS = 0; jk.style.transform = ''; window.removeEventListener('touchmove', m); };
-                window.addEventListener('touchmove', m); window.addEventListener('touchend', end);
-            });
-            document.getElementById('btn-jump').onclick = () => { if(vy === 0) vy = 0.3; };
-
-            // Touch Look
-            const vp = document.getElementById('viewport');
-            vp.addEventListener('touchstart', e => {
-                if(!isPlaying) return;
-                for(let t of e.changedTouches) if(t.clientX > window.innerWidth/2) { touchLookId = t.identifier; lastTouchX = t.clientX; lastTouchY = t.clientY; }
-            });
-            vp.addEventListener('touchmove', e => {
-                if(!isPlaying || touchLookId === null) return;
-                for(let t of e.changedTouches) if(t.identifier === touchLookId) {
-                    yaw -= (t.clientX - lastTouchX) * 0.005; pitch -= (t.clientY - lastTouchY) * 0.005;
-                    pitch = Math.max(-1.5, Math.min(1.5, pitch));
-                    lastTouchX = t.clientX; lastTouchY = t.clientY;
-                }
-            });
-        }
-
-        function checkCollision(pos, dir, dist) {
-            const solids = objects.filter(o => o.phys === 'fixed').map(o => o.mesh);
-            raycaster.set(pos, dir);
-            const intersects = raycaster.intersectObjects(solids, true);
-            return intersects.length > 0 && intersects[0].distance < dist;
-        }
-
-        function loop() {
-            requestAnimationFrame(loop);
             if(isPlaying) {
                 objects.forEach(o => {
-                    if(o.fns) o.fns.forEach(f => f());
-                    if(o.type === 'player') {
-                        vy -= 0.015;
-                        if(checkCollision(o.mesh.position, new THREE.Vector3(0,-1,0), 0.75) || o.mesh.position.y < 0.5) {
-                            vy = 0; if(o.mesh.position.y < 0.5) o.mesh.position.y = 0.5;
-                        }
-                        o.mesh.position.y += vy;
-                        let fwd = new THREE.Vector3(-Math.sin(yaw), 0, -Math.cos(yaw));
-                        let rgt = new THREE.Vector3(-Math.cos(yaw), 0, Math.sin(yaw));
-                        let move = new THREE.Vector3().addScaledVector(fwd, moveF*0.15).addScaledVector(rgt, moveS*0.15);
-                        if(move.length() > 0 && !checkCollision(o.mesh.position, move.clone().normalize(), 0.6)) o.mesh.position.add(move);
-                        
-                        if(o.cam === '1st') {
-                            camera.position.copy(o.mesh.position).y += 0.4;
-                            camera.lookAt(camera.position.x - Math.sin(yaw), camera.position.y + Math.sin(pitch), camera.position.z - Math.cos(yaw));
-                        } else {
-                            camera.position.set(o.mesh.position.x + Math.sin(yaw)*5, o.mesh.position.y + 3, o.mesh.position.z + Math.cos(yaw)*5);
-                            camera.lookAt(o.mesh.position);
-                        }
-                    }
+                    o.oldPos = o.mesh.position.clone();
+                    o.oldRot = o.mesh.rotation.clone();
+                    o.runtimeScripts = o.scripts.map(s => {
+                        try { return new Function(s.code).bind(o.mesh); }
+                        catch(e) { return null; }
+                    });
+                });
+            } else {
+                objects.forEach(o => {
+                    if(o.oldPos) o.mesh.position.copy(o.oldPos);
+                    if(o.oldRot) o.mesh.rotation.copy(o.oldRot);
+                });
+                yaw = 0; pitch = 0; moveF = 0; moveS = 0;
+            }
+        };
+
+        // Cor do Objeto (Aplicação Direta)
+        document.getElementById('i-color').oninput = (e) => {
+            if(selected && selected.mesh.material) {
+                selected.mesh.material.color.set(e.target.value);
+            }
+        };
+
+        // Textura do Objeto (Aplicação Direta)
+        document.getElementById('file-tex').onchange = (e) => {
+            const file = e.target.files[0];
+            if(file && selected) {
+                const url = URL.createObjectURL(file);
+                new THREE.TextureLoader().load(url, (tex) => {
+                    selected.mesh.material.map = tex;
+                    selected.mesh.material.needsUpdate = true;
                 });
             }
-            renderer.render(scene, camera);
-        }
+        };
 
-        function refreshH() {
-            const l = document.getElementById('obj-list'); l.innerHTML = '';
+        // Joystick Logic
+        const jz = document.getElementById('joy-zone'), jk = document.getElementById('joy-knob');
+        jz.addEventListener('touchstart', e => {
+            const r = jz.getBoundingClientRect(), cx = r.left + 60, cy = r.top + 60;
+            const move = ev => {
+                const t = [...ev.touches].find(t => t.clientX < window.innerWidth/2);
+                if(!t) return;
+                const dx = t.clientX - cx, dy = t.clientY - cy, d = Math.min(Math.sqrt(dx*dx+dy*dy), 40), a = Math.atan2(dy, dx);
+                jk.style.transform = `translate(${Math.cos(a)*d}px, ${Math.sin(a)*d}px)`;
+                moveS = Math.cos(a) * (d/40); moveF = -Math.sin(a) * (d/40);
+            };
+            const end = () => { moveF = 0; moveS = 0; jk.style.transform = ''; window.removeEventListener('touchmove', move); };
+            window.addEventListener('touchmove', move); window.addEventListener('touchend', end);
+        });
+
+        // Touch Look
+        const vp = document.getElementById('viewport');
+        vp.addEventListener('touchstart', e => {
+            if(!isPlaying) return;
+            const t = [...e.changedTouches].find(t => t.clientX > window.innerWidth/2);
+            if(t) { lookTouchId = t.identifier; lastX = t.clientX; lastY = t.clientY; }
+        });
+        vp.addEventListener('touchmove', e => {
+            if(!isPlaying || lookTouchId === null) return;
+            const t = [...e.changedTouches].find(t => t.identifier === lookTouchId);
+            if(t) {
+                yaw -= (t.clientX - lastX) * 0.005;
+                pitch -= (t.clientY - lastY) * 0.005;
+                pitch = Math.max(-1.5, Math.min(1.5, pitch));
+                lastX = t.clientX; lastY = t.clientY;
+            }
+        });
+
+        document.getElementById('i-name').oninput = e => { if(selected) { selected.name = e.target.value; refreshHierarchy(); } };
+        document.getElementById('i-phys').onchange = e => { if(selected) selected.phys = e.target.value; };
+        document.getElementById('i-cam').onchange = e => { if(selected) selected.cam = e.target.value; };
+        document.getElementById('btn-del').onclick = () => { if(selected) { scene.remove(selected.mesh); objects = objects.filter(o => o !== selected); select(null); refreshHierarchy(); } };
+        
+        document.getElementById('file-glb').onchange = e => {
+            const f = e.target.files[0];
+            if(f) loader.load(URL.createObjectURL(f), g => spawn('glb', g.scene));
+        };
+        document.getElementById('btn-jump').onclick = () => { if(vy === 0) vy = 0.25; };
+    }
+
+    function loop() {
+        requestAnimationFrame(loop);
+        if(isPlaying) {
             objects.forEach(o => {
-                const d = document.createElement('div'); d.className = `list-item ${selected===o?'sel':''}`;
-                d.innerText = o.name; d.onclick = () => select(o); l.appendChild(d);
+                if(o.runtimeScripts) o.runtimeScripts.forEach(fn => { if(fn) fn(); });
+                
+                if(o.type === 'player') {
+                    vy -= 0.012; o.mesh.position.y += vy;
+                    if(o.mesh.position.y < 0.5) { o.mesh.position.y = 0.5; vy = 0; }
+                    
+                    const dirF = new THREE.Vector3();
+                    camera.getWorldDirection(dirF); dirF.y = 0; dirF.normalize();
+                    const dirS = new THREE.Vector3().crossVectors(new THREE.Vector3(0,1,0), dirF).normalize();
+                    o.mesh.position.add(new THREE.Vector3().addScaledVector(dirF, moveF * 0.15).addScaledVector(dirS, -moveS * 0.15));
+
+                    if(o.cam === '1st') {
+                        camera.position.copy(o.mesh.position); camera.position.y += 0.4;
+                        camera.rotation.set(pitch, yaw + Math.PI, 0, 'YXZ');
+                    } else {
+                        const d = 5;
+                        camera.position.set(o.mesh.position.x + Math.sin(yaw)*d, o.mesh.position.y + 2.5, o.mesh.position.z + Math.cos(yaw)*d);
+                        camera.lookAt(o.mesh.position);
+                    }
+                }
             });
         }
-        init();
-    </script>
+        renderer.render(scene, camera);
+    }
+
+    function refreshHierarchy() {
+        const list = document.getElementById('obj-list'); list.innerHTML = '';
+        objects.forEach(o => {
+            const div = document.createElement('div');
+            div.className = `list-item ${selected === o ? 'sel' : ''}`;
+            div.innerText = o.name;
+            div.onclick = () => select(o);
+            list.appendChild(div);
+        });
+    }
+</script>
 </body>
 </html>
